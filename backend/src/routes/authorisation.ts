@@ -5,12 +5,13 @@ import axios from "axios"
 import { user } from "./db"
 import jwt from "jsonwebtoken"
 import { secretKey } from "./config"
+import env from "dotenv"
 
 const router = express.Router();
 
 const oauth2Client = new google.auth.OAuth2(
-    '523137783564-2ppv0qcq9555pqjgdv0ea74kn0nfrbup.apps.googleusercontent.com',
-    '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',
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
     'http://localhost:1301/api/v1/oauth/google',
 );
 

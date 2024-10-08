@@ -12,8 +12,6 @@ const tokenExpiryChecker = () => {
 
 export default function Dashboard() {
 
-
-
     const token = tokenExpiryChecker()
 
 
