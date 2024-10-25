@@ -1,17 +1,18 @@
 import express from "express";
 import { access } from "fs";
 import { google } from "googleapis"
+import { OAuth2Client } from 'google-auth-library';
 import axios from "axios"
 import { user } from "./db"
 import jwt from "jsonwebtoken"
 import { secretKey } from "./config"
-import env from "dotenv"
-
+import dotenv from "dotenv"
+dotenv.config()
 const router = express.Router();
 
 const oauth2Client = new google.auth.OAuth2(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
+    "523137783564-2ppv0qcq9555pqjgdv0ea74kn0nfrbup.apps.googleusercontent.com",
+    "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",
     'http://localhost:1301/api/v1/oauth/google',
 );
 
@@ -29,7 +30,7 @@ async function tokenGetter(code: any) {
         console.log('Refresh Token:', tokens.refresh_token);
         console.log("Expiry date: " + tokie.expiryTime)
         return tokie; // return the tokens object
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error fetching tokens:', error);
         return null; // return null if there's an error
     }
@@ -52,6 +53,7 @@ router.get("/google", async (req, res) => {
 
 
     code = req.query.code as string; // we are getting this from the query parameters after redirection from the consent page
+    //console.log('Authorization Code:', code);
 
     const tokie = await tokenGetter(code)
     if (tokie) {
@@ -72,6 +74,7 @@ router.get("/google", async (req, res) => {
             console.log("User Successfully added! :)")
             //JWT encoding
             const newUser_id = person._id;
+
 
             var token = jwt.sign({
                 accessToken: tokie.accessToken,
